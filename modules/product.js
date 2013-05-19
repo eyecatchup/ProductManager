@@ -17,6 +17,9 @@ var f = function(redis, Q){
         return "product:"+id;
     };
 
+
+    // fetch a product asynchronously from redis
+    // returns a promise to be resolved with it
     var _get = function(id){
         var deferred = Q.defer();
         _client.get(_getKey(id), function(err, product){
@@ -28,6 +31,7 @@ var f = function(redis, Q){
         return deferred.promise;
     };
 
+    //fetch all products
     var _getAll =  function(){
         var deferred = Q.defer();
         _client.smembers(PRODUCT_SET, function(err, data){
@@ -50,7 +54,7 @@ var f = function(redis, Q){
         return deferred.promise;
     };
 
-
+    //add a new product 
     var _add = function(product){
         var deferred = Q.defer();
         _client.sadd(PRODUCT_SET, _id, function(err, data){
@@ -65,11 +69,13 @@ var f = function(redis, Q){
         return deferred.promise;
     };
 
+    //remove product by id
     var _remove = function(id){
         _client.del(_getKey(id));
         return _client.srem(PRODUCT_SET, id);
     };
 
+    //update a product
     var _update = function(id, product){
         var deferred = Q.defer();
         console.log(product);
@@ -90,5 +96,5 @@ var f = function(redis, Q){
 
 
 
-//expose the interface
+//export our function
 module.exports = f;
