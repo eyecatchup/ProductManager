@@ -1,0 +1,18 @@
+ul.products {
+    list-style-type:none;
+    margin:0px;
+}
+
+ul.products li {
+    line-height:30px;
+    padding: 5px;
+}
+
+ul.products li:nth-child(odd) { 
+    background: #f9f9f9;
+
+}
+
+.product-form {
+    padding-left: 20px;
+}
