@@ -1,7 +1,7 @@
 ProductManager
 ==============
 
-A Sample CRUD application structured by Backbone js and backed by a node restfull api, using Redis for data storage.
+A Sample CRUD one-page web application structured by Backbone js and backed by a node restfull api, using Redis for data storage.
 
 This repository is used strictly for learning purposes. 
 
