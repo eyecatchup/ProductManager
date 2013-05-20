@@ -1,6 +1,6 @@
 {
-    "name": "demo-shop",
-    "description": "shop sample CRUD app",
+    "name": "productManager,
+    "description": "sample CRUD web application",
     "version": "0.0.1",
     "private": true,
     "dependencies": {
