@@ -89,7 +89,7 @@ app.ProductListView = Backbone.View.extend({
         var $list = this.$el.children("ul");
         $list.empty();
         var self = this;
-        if (this.collection.length==0){
+        if (this.collection.length===0){
             $list.html("<li class='product-list-placeholder'><small>No products added.</small></li>");
         }
         else {
