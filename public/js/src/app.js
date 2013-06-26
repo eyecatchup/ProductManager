@@ -11,13 +11,21 @@ app.Product = Backbone.Model.extend({
         // backbone requires returning a "falsy" value for the model to be valid
         var errors = {};
         var isValid = true;
-        if (isNaN(parseFloat(this.get("price")))){
-            errors.price = 'Invalid price.';
-            isValid = false;
+        if (parseFloat(this.get("price"))!=this.get("price")){
+          errors.price = 'Invalid price.';
+          isValid = false;
         }
-        if (isNaN(parseInt(this.get("quantity")))){
-            errors.quantity = 'Invalid quantity.';
-            isValid = false;
+        if (parseInt(this.get("price"))<=0){
+          errors.price = 'Price should be positive.";
+          isValid = false;
+        }
+        if (parseInt(this.get("quantity"))!=this.get("quantity")){
+          errors.quantity = 'Invalid quantity.';
+          isValid = false;
+        }
+        if (parseInt(this.get("quantity"))<1){
+          errors.quantity = 'Quantity must be larger than 0.';
+          isValid = false;
         }
         return (isValid)? false:errors;
     },
@@ -56,6 +64,7 @@ app.ProductView = Backbone.View.extend({
     delete: function(e){
         this.remove();
         this.model.destroy();
+        this.collection.trigger("change");
     },
 
     edit: function(e){
@@ -93,12 +102,14 @@ app.ProductListView = Backbone.View.extend({
             $list.html("<li class='product-list-placeholder'><small>No products added.</small></li>");
         }
         else {
+            var collection = this.collection;
             this.collection.each(function(product){
                 var $li = $("<li>");
                 $list.append($li);
                 new app.ProductView({
                     el: $li,
-                    model: product
+                    model: product,
+                    collection: collection
                 });
             });
         }
@@ -114,7 +125,8 @@ app.ProductListView = Backbone.View.extend({
         $list.append($li);
         new app.ProductView({
             el: $li,
-            model: product
+            model: product,
+            collection: this.collection
         });
         new app.ProductTotalView({
             collection: this.collection   
@@ -172,8 +184,8 @@ app.ProductFormView = Backbone.View.extend({
         var quantity = this.$el.find("input[name='quantity']").val();
 
         this.model.set("name", name);
-        this.model.set("price", price);
-        this.model.set("quantity", quantity);
+        this.model.set("price", parseFloat(price));
+        this.model.set("quantity", parseInt(quantity));
         
         var err = this.model.validate();
         if (err){

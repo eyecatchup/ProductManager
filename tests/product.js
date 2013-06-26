@@ -15,7 +15,8 @@ describe('product', function(){
     var product = {
       "name": "sampleproduct",
       "price": 100,
-      "quantity": 3
+      "quantity": 3,
+      "subtotal": 300
     };
     assert.isUndefined(product.id, "Product has no id");
     app.product.add(product).then(function(inserted){
@@ -31,7 +32,8 @@ describe('product', function(){
     var product = {
       "name": "justaproduct",
       "price": 10,
-      "quantity": 2
+      "quantity": 2,
+      "subtotal": 20
     };
     //just a reference
     var inserted;
@@ -47,8 +49,55 @@ describe('product', function(){
         done();
     }).fail(done);
   });
-  it('should delete product', function(){
+  it('should delete product', function(done){
+    var product = {
+      "name": "anotherproduct",
+      "price": 5,
+      "quantity": 3,
+      "subtotal": 15
+    };
+
+    app.product.add(product).then(function(product){
+      var result = app.product.remove(product.id);
+      assert.equal(result, 1, "Return value of delete");
+      done();
+    }).fail(done);
   });
-  it('should edit product');
-  it('should validate product');
+  it('should edit product', function(done){
+     var product = {
+       "name": "justaproduct",
+       "price": 3,
+       "quantity": 4,
+       "subtotal": 12
+     };
+     
+     //first we add a mock product
+     app.product.add(product).then(function(inserted){
+       inserted.name = "newproductname";
+       inserted.price = 100;
+       inserted.quantity = 5;
+       inserted.subtotal = 500;
+       //update our product
+       return app.product.update(inserted.id, inserted);
+     }).then(function(updated){
+         //fetch by id
+         return app.product.get(updated.id);
+     }).then(function(fetched){
+         assert.equal(fetched.name, "newproductname", "Name match");
+         assert.equal(fetched.price, 100, "Price match");
+         assert.equal(fetched.quantity, 5, "Qty match");
+         done();
+     }).fail(done);
+  });
+  it('should return validation error', function(done){
+    var product = {
+      "name": "newproduct",
+      "price": "xx",
+      "quantity": "yy"
+    };
+    assert.throw(function(){
+      console.log(app.product.add(product));
+    }, Error);
+    done(); 
+  });
 });

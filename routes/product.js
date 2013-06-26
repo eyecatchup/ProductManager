@@ -42,7 +42,6 @@ module.exports = function(app){
             res.write(JSON.stringify(product));
             res.end();
         });
-
     });
 
     //remove product

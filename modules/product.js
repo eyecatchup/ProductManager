@@ -12,7 +12,7 @@ var f = function(){
     var PRODUCT_SET = 'products';
     var _self = this;
     var _client = redis.createClient(); 
-    var _id = 0;
+    var _id = Date.now()/1000;
 
     //private function returning the redis key for a product id
     var _getKey = function(id){
@@ -59,11 +59,14 @@ var f = function(){
     //add a new product 
     var _add = function(product){
         var deferred = Q.defer();
+        _validate(product);
+        
         _client.sadd(PRODUCT_SET, _id, function(err, data){
             if (err){
                 deferred.reject(err);
             }
             product.id = _id;
+
             _client.set(_getKey(_id), JSON.stringify(product), redis.print);
             deferred.resolve(product);
             _id++;
@@ -80,12 +83,23 @@ var f = function(){
     //update a product
     var _update = function(id, product){
         var deferred = Q.defer();
-        console.log(product);
         _client.set(_getKey(id), JSON.stringify(product), redis.print);
         deferred.resolve(product);
         return deferred.promise;
     };
 
+    //validate product
+    var _validate = function(product){
+      console.log(product);
+      if (!(typeof product.price === "number"))
+        throw new Error("invalid price");
+      if (!(typeof product.quantity === "number"))
+        throw new Error("invalid quantity");
+      if (!(typeof product.subtotal === "number"))
+        throw new Error("invalid subtotal");
+      if (!(product.price*product.quantity===product.subtotal))
+        throw new Error("invalid math");
+    }
     //exposed interface
     return {
         get: _get,
