@@ -4,21 +4,18 @@
  */
 
 var express = require ('express');
-var redis = require ('redis');
-var Q = require ('q');
 var app = express();
 
 //configure app
 require ('./config')(app, express);
 
 //load product model
-var product = require('./modules/product')(redis, Q);
+app.product = require('./modules/product')();
 
 //apply website routes routes
-require ('./routes/main')(app, product);
+require ('./routes/main')(app);
 
 //apply product rest routes
-require('./routes/product')(app, product);
+require('./routes/product')(app);
 
-app.listen(8000);
-console.log ('listening on port 8000...');
+module.exports = app;

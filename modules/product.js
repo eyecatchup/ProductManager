@@ -4,8 +4,10 @@
  *    ids in a set [1,2,3...] 
  *    key-value pairs e.g. "product:1" : "{'name':'sneakers', 'price':'50'}"
  */
+var redis = require('redis');
+var Q = require('q');
 
-var f = function(redis, Q){
+var f = function(){
 
     var PRODUCT_SET = 'products';
     var _self = this;

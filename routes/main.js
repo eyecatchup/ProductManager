@@ -2,9 +2,9 @@
  * configure the url routes for the server to respond to
  */
 
-module.exports = function(app, Product){
+module.exports = function(app){
     app.get('/', function(req, res){
-        Product.getAll().then(function(data){
+        app.product.getAll().then(function(data){
             res.render('index.html');
             res.end();
         });

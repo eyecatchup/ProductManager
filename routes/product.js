@@ -2,11 +2,11 @@
  * Setup restfull routes used by the backbone application.
  */
 
-module.exports = function(app, Product){
+module.exports = function(app){
 
     //return all products
     app.get('/product', function(req, res){
-        Product.getAll().then(function(data){
+        app.product.getAll().then(function(data){
             res.writeHead(200, {'content-type': 'text/plain' }); 
             res.write(JSON.stringify(data));
             res.end();
@@ -15,7 +15,7 @@ module.exports = function(app, Product){
 
     //get product
     app.get('/product/:id', function(req, res){
-        Product.get(req.params.id).then(function(product){
+        app.product.get(req.params.id).then(function(product){
             res.writeHead(200, {'content-type': 'text/plain'});
             res.write(JSON.stringify(product));
             res.end();
@@ -25,7 +25,7 @@ module.exports = function(app, Product){
 
     //add product
     app.post('/product', function(req, res){
-        Product.add(req.body).then(function(product){
+        app.product.add(req.body).then(function(product){
             res.writeHead(200, {'content-type': 'text/plain' });
             res.write(JSON.stringify(product));
             res.end();
@@ -37,7 +37,7 @@ module.exports = function(app, Product){
     app.put('/product/:id', function(req, res){
         id = req.params.id;
         entity = req.body;
-        Product.update(id, entity).then(function(product){
+        app.product.update(id, entity).then(function(product){
             res.writeHead(200, {'content-type': 'text/plain' });
             res.write(JSON.stringify(product));
             res.end();
@@ -47,7 +47,7 @@ module.exports = function(app, Product){
 
     //remove product
     app.delete('/product/:id', function(req, res){
-        var result = Product.remove(req.params.id);
+        var result = app.product.remove(req.params.id);
         res.writeHead(200, {'content-type': 'text/plain' });
         res.write(result.toString());
         res.end();
