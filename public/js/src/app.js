@@ -1,4 +1,3 @@
-
 var app = app || {};
 
 app.Product = Backbone.Model.extend({
@@ -16,7 +15,7 @@ app.Product = Backbone.Model.extend({
           isValid = false;
         }
         if (parseInt(this.get("price"))<=0){
-          errors.price = 'Price should be positive.";
+          errors.price = 'Price should be positive.';
           isValid = false;
         }
         if (parseInt(this.get("quantity"))!=this.get("quantity")){
